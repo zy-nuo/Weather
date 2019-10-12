@@ -5,6 +5,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.weather.gson.Forecast;
 import com.example.weather.gson.Weather;
+import com.example.weather.service.AutoUpdateService;
 import com.example.weather.util.HttpUtil;
 import com.example.weather.util.Utility;
 
@@ -175,6 +177,10 @@ public class WeatherActivity extends AppCompatActivity {
         loadBingPic();
     }
 
+    /**
+     * 处理并展示Weather实体类中的数据
+     * @param weather
+     */
     private void showWeatherInfo(Weather weather) {
         String cityName = weather.basic.cityName;
         String updateTime = weather.basic.update.updateTime.split(" ")[1];
@@ -209,6 +215,9 @@ public class WeatherActivity extends AppCompatActivity {
         mCarWashText.setText(carWash);
         mSportText.setText(sport);
         mWeatherLayout.setVisibility(View.VISIBLE);
+        //启动后台自动刷新服务功能
+        Intent intent = new Intent(this, AutoUpdateService.class);
+        startService(intent);
     }
 
     private void initController() {
